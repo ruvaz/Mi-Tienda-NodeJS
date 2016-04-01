@@ -1,0 +1,52 @@
+extends layout
+
+
+block content
+    h1
+        a(href="/")=titulo
+
+
+    include botonesEdicion.jade
+
+
+    div.contenedor
+
+
+    - for (var i = 0; i < camisetas.length ; ++i) {
+    div.item
+        h2="Camiseta " + camisetas[i].color
+        img(src="images/" + camisetas[i].imagen, width="250")
+        a(href="/tienda/comprar/" + camisetas[i].color  ).comprar  Detalles
+    - }
+
+
+    include chat.jade
+
+
+
+    script(type='text/javascript', src='http://cdn.socket.io/socket.io-1.2.0.js')
+
+    script(type='text/javascript', src='http://code.jquery.com/jquery-1.11.1.js')
+
+    script.
+
+        var socket = io();
+
+        $('form').submit(function () {
+            socket.emit('chat message', $('#m').val());
+            $('#m').val('');
+
+            return false;
+        });
+
+        socket.on('chat message', function (msg) {
+            $('#messages').prepend($('<li>').text(msg));
+        });
+
+        $('#tituloChat').on('click', function () {
+            $(".chat").css({'bottom': '0px', 'right': '0px'})
+
+        })
+
+
+
